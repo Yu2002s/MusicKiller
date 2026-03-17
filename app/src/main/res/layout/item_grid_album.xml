@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="com.drake.engine.databinding.GlideDataBindingComponent" />
+
+        <variable
+            name="m"
+            type="xyz.jdynb.music.model.AlbumModel" />
+        
+    </data>
+    
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/item_album"
+        tools:layout_width="200dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        
+        <ImageView
+            android:id="@+id/iv_album"
+            img="@{m.pic}"
+            corner="@{12}"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintDimensionRatio="1:1"
+            android:layout_width="0dp"
+            android:layout_height="0dp" />
+        
+        <TextView
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:text="@{m.album}"
+            android:id="@+id/tv_name"
+            android:layout_marginTop="10dp"
+            android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
+            tools:text="@string/app_name"
+            app:layout_constraintTop_toBottomOf="@id/iv_album"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <TextView
+            android:text="@{m.releaseDate}"
+            android:layout_marginTop="4dp"
+            android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
+            tools:text="@string/app_name"
+            app:layout_constraintTop_toBottomOf="@id/tv_name"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

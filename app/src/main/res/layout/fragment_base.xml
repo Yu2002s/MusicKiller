@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:fitsSystemWindows="true"
+    android:layout_width="match_parent">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appbar"
+        android:layout_width="match_parent"
+        android:fitsSystemWindows="true"
+        android:layout_height="wrap_content"
+        android:stateListAnimator="@null"
+        app:liftOnScroll="false"
+        app:statusBarForeground="@null">
+
+        <com.google.android.material.appbar.CollapsingToolbarLayout
+            app:title="@string/app_name"
+            android:layout_width="match_parent"
+            app:titleCollapseMode="scale"
+            app:statusBarScrim="@android:color/transparent"
+            style="?attr/collapsingToolbarLayoutMediumStyle"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed|snap"
+            app:expandedTitleTextAppearance="?textAppearanceHeadlineLarge"
+            app:expandedSubtitleTextAppearance="@style/TextAppearance.Material3.BodyMedium"
+            app:contentScrim="@android:color/transparent"
+            android:id="@+id/collapsing_toolbar_layout"
+            tools:title="@string/app_name"
+            app:expandedTitleMarginStart="24dp"
+            android:layout_height="120dp">
+
+            <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/toolbar"
+                android:elevation="0dp"
+                android:layout_width="match_parent"
+                app:layout_collapseMode="pin"
+                android:layout_height="?attr/actionBarSize" />
+
+        </com.google.android.material.appbar.CollapsingToolbarLayout>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

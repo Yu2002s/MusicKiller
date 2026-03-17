@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<litepal>
+    <dbname value="music-killer" />
+    <version value="6" />
+    <list>
+        <!-- 收藏 -->
+        <mapping class="xyz.jdynb.music.model.FavoriteModel" />
+        <mapping class="xyz.jdynb.music.model.search.SearchHistory" />
+        <mapping class="xyz.jdynb.music.model.download.DownloadModel" />
+        <mapping class="xyz.jdynb.music.model.PlayHistory" />
+    </list>
+</litepal>

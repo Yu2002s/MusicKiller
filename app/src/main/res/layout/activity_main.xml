@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="com.drake.engine.databinding.DataBindingComponent" />
+
+        <import type="com.drake.engine.databinding.GlideDataBindingComponent" />
+
+        <import type="xyz.jdynb.music.R" />
+
+        <variable
+            name="m"
+            type="xyz.jdynb.music.ui.activity.MainViewModel" />
+    </data>
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:id="@+id/coordinator"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/nav_host_fragment"
+            android:name="androidx.navigation.fragment.NavHostFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:defaultNavHost="true"
+            app:navGraph="@navigation/nav_graph" />
+
+        <LinearLayout
+            android:id="@+id/bottom_bar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="?attr/colorSurface"
+            android:orientation="vertical"
+            app:behavior_draggable="true"
+            app:behavior_draggableOnNestedScroll="true"
+            app:behavior_hideable="false"
+            app:behavior_peekHeight="68dp"
+            app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/play_bar"
+                hit="@{true}"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:animateLayoutChanges="true">
+
+                <com.google.android.material.divider.MaterialDivider
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageView
+                    android:id="@+id/music_cover"
+                    corner="@{6}"
+                    img="@{m.musicModel.showPic}"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_marginVertical="10dp"
+                    android:layout_marginStart="20dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:src="@tools:sample/avatars" />
+
+                <TextView
+                    android:id="@+id/music_name"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginEnd="10dp"
+                    android:maxLines="1"
+                    android:ellipsize="end"
+                    android:text="@{m.musicModel.name}"
+                    android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
+                    app:layout_constraintBottom_toTopOf="@id/music_artist"
+                    app:layout_constraintEnd_toStartOf="@id/btn_favorite"
+                    app:layout_constraintStart_toEndOf="@id/music_cover"
+                    app:layout_constraintTop_toTopOf="@id/music_cover"
+                    tools:text="@string/app_name" />
+
+                <TextView
+                    android:id="@+id/music_artist"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:maxLines="1"
+                    android:ellipsize="end"
+                    android:text="@{m.musicModel.artist}"
+                    android:textAppearance="@style/TextAppearance.Material3.BodySmall"
+                    app:layout_constraintBottom_toBottomOf="@id/music_cover"
+                    app:layout_constraintEnd_toEndOf="@id/music_name"
+                    app:layout_constraintStart_toStartOf="@id/music_name"
+                    app:layout_constraintTop_toBottomOf="@id/music_name"
+                    tools:text="@string/app_name" />
+
+                <androidx.appcompat.widget.AppCompatImageButton
+                    hit="@{true}"
+                    selected="@{m.musicModel.favorite}"
+                    android:id="@+id/btn_favorite"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="12dp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:src="@drawable/ic_favorite"
+                    app:layout_constraintBottom_toBottomOf="@id/music_cover"
+                    app:layout_constraintEnd_toStartOf="@id/btn_play"
+                    app:layout_constraintTop_toTopOf="@id/music_cover" />
+
+                <androidx.appcompat.widget.AppCompatImageButton
+                    hit="@{true}"
+                    android:id="@+id/btn_play"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="20dp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:src="@{m.isPlaying ? R.drawable.baseline_pause_24 : R.drawable.baseline_play_arrow_24}"
+                    app:layout_constraintBottom_toBottomOf="@id/music_cover"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/music_cover" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_marginTop="-32dp"
+                android:translationZ="-10dp"
+                android:alpha="0"
+                android:id="@+id/main_player"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1">
+
+                <ImageButton
+                    android:id="@+id/btn_close"
+                    hit="@{true}"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_marginStart="20dp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:src="@drawable/baseline_close_24"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <com.google.android.material.tabs.TabLayout
+                    android:id="@+id/tab"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/transparent"
+                    android:paddingBottom="0dp"
+                    app:tabBackground="@null"
+                    android:clipToPadding="false"
+                    app:tabIndicator="@drawable/selected_chip_background"
+                    app:tabIndicatorColor="?colorSecondaryContainer"
+                    app:tabIndicatorFullWidth="true"
+                    app:tabIndicatorGravity="stretch"
+                    app:tabMinWidth="0dp"
+                    app:tabMode="fixed"
+                    app:tabGravity="center"
+                    app:tabPaddingEnd="30dp"
+                    app:tabPaddingStart="30dp"
+                    app:tabRippleColor="@null"
+                    app:tabSelectedTextColor="?colorOnSecondaryContainer"
+                    app:tabTextColor="?attr/colorOnSurfaceVariant"
+                    app:tabTextAppearance="@style/TabTextAppearance">
+
+                </com.google.android.material.tabs.TabLayout>
+
+                <androidx.viewpager2.widget.ViewPager2
+                    android:id="@+id/vp_music"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/btn_close"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </LinearLayout>
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+</layout>
+

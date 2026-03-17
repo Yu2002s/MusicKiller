@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="m"
+            type="xyz.jdynb.music.model.MusicModel" />
+
+    </data>
+
+    <LinearLayout
+        android:background="?attr/selectableItemBackground"
+        android:id="@+id/item_rank"
+        android:padding="10dp"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            tools:text="@string/app_name"
+            android:textAppearance="@style/TextAppearance.Material3.TitleSmall"
+            android:text="@{m.name}"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <TextView
+            tools:text="@string/app_name"
+            android:layout_marginTop="10dp"
+            android:text="@{m.artist}"
+            android:textAppearance="@style/TextAppearance.Material3.BodySmall"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+    </LinearLayout>
+
+</layout>

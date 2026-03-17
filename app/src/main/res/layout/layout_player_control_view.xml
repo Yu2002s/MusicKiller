@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas-material.android.com/apk/res-auto"
+    xmlns:app2="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#80000000"
+    android:padding="16dp">
+
+    <!-- 播放/暂停按钮 -->
+    <ImageButton
+        android:id="@id/exo_play_pause"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:src="@drawable/exo_icon_play"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:contentDescription="播放/暂停"
+        app2:tint="#FFFFFF" />
+
+    <!-- 上一首 -->
+    <ImageButton
+        android:id="@id/exo_prev"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:src="@drawable/exo_icon_previous"
+        app:layout_constraintBottom_toBottomOf="@id/exo_play_pause"
+        app:layout_constraintTop_toTopOf="@id/exo_play_pause"
+        app:layout_constraintEnd_toStartOf="@id/exo_play_pause"
+        android:layout_marginEnd="24dp"
+        android:contentDescription="上一首"
+        app2:tint="#FFFFFF" />
+
+    <!-- 下一首 -->
+    <ImageButton
+        android:id="@id/exo_next"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:src="@drawable/exo_icon_next"
+        app:layout_constraintBottom_toBottomOf="@id/exo_play_pause"
+        app:layout_constraintTop_toTopOf="@id/exo_play_pause"
+        app:layout_constraintStart_toEndOf="@id/exo_play_pause"
+        android:layout_marginStart="24dp"
+        android:contentDescription="下一首"
+        app2:tint="#FFFFFF" />
+
+    <!-- 快退 -->
+    <ImageButton
+        android:id="@id/exo_rew"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:src="@drawable/exo_icon_rewind"
+        app:layout_constraintBottom_toBottomOf="@id/exo_play_pause"
+        app:layout_constraintTop_toTopOf="@id/exo_play_pause"
+        app:layout_constraintEnd_toStartOf="@id/exo_prev"
+        android:layout_marginEnd="16dp"
+        android:contentDescription="快退"
+        app2:tint="#CCCCCC" />
+
+    <!-- 快进 -->
+    <ImageButton
+        android:id="@id/exo_ffwd"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:src="@drawable/exo_icon_fastforward"
+        app:layout_constraintBottom_toBottomOf="@id/exo_play_pause"
+        app:layout_constraintTop_toTopOf="@id/exo_play_pause"
+        app:layout_constraintStart_toEndOf="@id/exo_next"
+        android:layout_marginStart="16dp"
+        android:contentDescription="快进"
+        app2:tint="#CCCCCC" />
+
+    <!-- 进度条 -->
+    <com.google.android.material.slider.Slider
+        android:id="@id/exo_progress"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:valueFrom="0"
+        android:valueTo="100"
+        app:layout_constraintBottom_toTopOf="@id/exo_play_pause"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginBottom="16dp"
+        app:thumbColor="#FFFFFF"
+        app:trackColorActive="#FF6B6B"
+        app:trackColorInactive="#40FFFFFF" />
+
+    <!-- 当前时间 -->
+    <TextView
+        android:id="@id/exo_position"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#FFFFFF"
+        android:textSize="12sp"
+        android:text="00:00"
+        app:layout_constraintBottom_toTopOf="@id/exo_progress"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginBottom="4dp" />
+
+    <!-- 总时长 -->
+    <TextView
+        android:id="@id/exo_duration"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#FFFFFF"
+        android:textSize="12sp"
+        android:text="00:00"
+        app:layout_constraintBottom_toTopOf="@id/exo_progress"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginBottom="4dp" />
+
+    <!-- 自定义按钮：收藏 -->
+    <!--<ImageButton
+        android:id="@+id/btn_favorite"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:src="@drawable/ic_heart_outline"
+        android:tint="#FFFFFF"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/btn_playlist"
+        android:contentDescription="收藏" />-->
+
+    <!-- 自定义按钮：播放列表 -->
+   <!-- <ImageButton
+        android:id="@+id/btn_playlist"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:src="@drawable/ic_playlist"
+        android:tint="#FFFFFF"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:contentDescription="播放列表" />-->
+
+</androidx.constraintlayout.widget.ConstraintLayout>

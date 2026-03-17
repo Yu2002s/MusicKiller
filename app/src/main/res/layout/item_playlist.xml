@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="com.drake.engine.databinding.GlideDataBindingComponent" />
+
+        <variable
+            name="m"
+            type="xyz.jdynb.music.model.PlayListModel" />
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/item_playlist"
+        android:layout_width="match_parent"
+        tools:layout_width="100dp"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            corner="@{8}"
+            android:scaleType="centerCrop"
+            android:id="@+id/play_list_img"
+            tools:src="@tools:sample/avatars"
+            img="@{m.img}"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintDimensionRatio="W,1:1"
+            android:layout_width="0dp"
+            android:layout_height="0dp"/>
+
+        <com.google.android.material.textview.MaterialTextView
+            app:drawableTint="@color/white"
+            android:layout_marginEnd="3dp"
+            android:layout_marginBottom="3dp"
+            android:paddingHorizontal="6dp"
+            android:text="@{m.listenCountStr}"
+            android:background="@drawable/bg_corner_leader"
+            tools:text="1233"
+            android:gravity="center_vertical"
+            android:textAppearance="@style/TextAppearance.Material3.BodySmall"
+            app:drawableStartCompat="@drawable/baseline_play_arrow_24"
+            app:layout_constraintEnd_toEndOf="@id/play_list_img"
+            app:layout_constraintBottom_toBottomOf="@id/play_list_img"
+            android:textColor="@color/white"
+            android:shadowColor="#80000000"
+            android:shadowRadius="1"
+            android:shadowDx="1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <TextView
+            android:text="@{m.name}"
+            tools:text="@string/app_name"
+            android:textAppearance="@style/TextAppearance.Material3.TitleSmall"
+            android:textSize="13sp"
+            android:maxLines="2"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/play_list_img"
+            android:layout_marginTop="6dp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

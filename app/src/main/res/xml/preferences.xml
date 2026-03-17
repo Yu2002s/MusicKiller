@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <PreferenceCategory
+        app:iconSpaceReserved="false"
+        app:title="储存">
+
+        <Preference
+            android:key="pref_cache"
+            android:summary="清理App音乐和图片缓存"
+            android:title="清理缓存"
+            app:iconSpaceReserved="false" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="关于"
+        app:iconSpaceReserved="false">
+
+        <Preference
+            android:key="pref_author"
+            android:summary="冬日暖雨"
+            android:title="作者"
+            app:iconSpaceReserved="false" />
+
+        <Preference
+            android:key="pref_mp"
+            android:summary="扫码关注公众号，获取最新信息"
+            android:title="公众号"
+            app:iconSpaceReserved="false" />
+
+        <Preference
+            android:key="pref_gitee"
+            android:summary="https://gitee.com/jdy2002/music-killer"
+            android:title="Gitee"
+            app:iconSpaceReserved="false" />
+
+        <Preference
+            android:key="pref_github"
+            android:summary="https://github.com/yu2002s/music-killer"
+            android:title="Github"
+            app:iconSpaceReserved="false" />
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <drawable name="play_anim">@drawable/ic_media_play_anim</drawable>
+    <drawable name="pause_anim">@drawable/ic_media_pause_anim</drawable>
+</resources>

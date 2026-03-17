@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="com.drake.engine.databinding.GlideDataBindingComponent" />
+
+        <variable
+            name="m"
+            type="xyz.jdynb.music.model.ArtistModel" />
+
+    </data>
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/appbar"
+            android:fitsSystemWindows="true"
+            android:stateListAnimator="@null"
+            android:background="@null"
+            app:statusBarForeground="@android:color/transparent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.google.android.material.appbar.CollapsingToolbarLayout
+                android:layout_width="match_parent"
+                app:titleCollapseMode="fade"
+                android:id="@+id/toolbar_layout"
+                app:statusBarScrim="@android:color/transparent"
+                style="?attr/collapsingToolbarLayoutMediumStyle"
+                app:layout_scrollFlags="scroll|exitUntilCollapsed"
+                app:expandedTitleTextAppearance="?textAppearanceHeadlineLarge"
+                app:titleEnabled="false"
+                app:expandedTitleMarginStart="24dp"
+                app:expandedTitleMarginBottom="28dp"
+                app:title="@{m.name}"
+                app:contentScrim="?attr/colorSurface"
+                android:layout_height="160dp">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <ImageView
+                        android:id="@+id/iv_avatar"
+                        tools:src="@tools:sample/avatars"
+                        android:layout_marginStart="16dp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        android:scaleType="centerCrop"
+                        imgCircle="@{m.pic300}"
+                        holder="@{@drawable/ic_holder}"
+                        android:layout_width="80dp"
+                        android:layout_height="80dp" />
+
+                    <TextView
+                        tools:text="@string/app_name"
+                        android:layout_marginHorizontal="16dp"
+                        android:textAppearance="@style/TextAppearance.Material3.TitleLarge"
+                        android:text="@{m.name}"
+                        app:layout_constraintTop_toTopOf="@id/iv_avatar"
+                        app:layout_constraintStart_toEndOf="@id/iv_avatar"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintBottom_toBottomOf="@id/iv_avatar"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"/>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <com.google.android.material.appbar.MaterialToolbar
+                    android:id="@+id/toolbar"
+                    android:elevation="0dp"
+                    app:title=" "
+                    android:layout_width="match_parent"
+                    app:layout_collapseMode="pin"
+                    android:layout_height="?attr/actionBarSize">
+
+                </com.google.android.material.appbar.MaterialToolbar>
+
+            </com.google.android.material.appbar.CollapsingToolbarLayout>
+
+            <include
+                android:id="@+id/tab"
+                layout="@layout/layout_tab" />
+
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/vp"
+            app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+</layout>

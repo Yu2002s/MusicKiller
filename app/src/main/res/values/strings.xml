@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">MusicKiller</string>
+
+    <string name="error_tips">加载失败了，请稍后重试</string>
+    <string name="empty_tips">这里空空如也哦！</string>
+    <string name="please_login">请先登录</string>
+
+    <!-- 通知栏按钮 -->
+    <string name="favorite">收藏</string>
+    <string name="lyrics">歌词</string>
+    <string name="select">选择</string>
+    <string name="download">下载</string>
+</resources>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tab_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+        android:paddingBottom="0dp"
+        app:tabBackground="@null"
+        android:paddingHorizontal="20dp"
+        android:clipToPadding="false"
+        app:tabIndicator="@drawable/selected_chip_background"
+        app:tabIndicatorColor="?colorSecondaryContainer"
+        app:tabIndicatorFullWidth="true"
+        app:tabIndicatorGravity="stretch"
+        app:tabMinWidth="0dp"
+        app:tabMode="scrollable"
+        app:tabGravity="start"
+        app:tabPaddingEnd="30dp"
+        app:tabPaddingStart="30dp"
+        app:tabRippleColor="@null"
+        app:tabSelectedTextColor="?colorOnSecondaryContainer"
+        app:tabTextColor="?attr/colorOnSurfaceVariant"
+        app:tabTextAppearance="@style/TabTextAppearance">
+
+    </com.google.android.material.tabs.TabLayout>
+
+</layout>
