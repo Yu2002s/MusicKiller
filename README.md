@@ -2,6 +2,46 @@
 
 一个简单好用的安卓音乐播放器。
 
+## 下载
+
+[点我去下载](https://gitee.com/jdy2002/MusicKiller/releases)
+
+## 交流/反馈
+
+- QQ 群
+
+<img src="./screenshots/qrcode_1773500386502.jpg" alt="Logo" width="250" style="display:block;margin:auto;">
+
+- 公众号
+
+<img src="./screenshots/qrcode_mp.jpg" alt="Logo" width="258" style="display:block;margin:auto;">
+
+## 注意
+
+- 只能用于学习用途
+- 不会自动更新，请点击 `Star` 后关注最新版本发布
+
+## 技术栈
+
+- Kotlin
+- Java
+
+## 构建
+
+需要自行修改签名 `/app/build.gradle` 修改签名路径和账号密码
+
+## 截图
+
+<img src="./screenshots/微信图片_20251223165551_212_317.jpg" alt="alt text" style="width: 250px;" />
+
+<img src="./screenshots/微信图片_20251223165552_213_317.jpg" alt="alt text" style="width: 280px" />
+
+<img src="./screenshots/微信图片_20251223165548_209_317.jpg" alt="alt text" style="width: 280px" />
+
+<img src="./screenshots/微信图片_20251223165549_210_317.jpg" alt="alt text" style="width: 280px" />
+
+<img src="./screenshots/微信图片_20251223165550_211_317.jpg" alt="alt text" style="width: 280px"
+
 ## 功能
 
 - **播放音乐** - 高质量播放，支持歌词显示
