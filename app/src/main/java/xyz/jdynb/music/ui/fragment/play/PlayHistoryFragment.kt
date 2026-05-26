@@ -18,10 +18,6 @@ class PlayHistoryFragment :
     enableMultiMode = true
   }
 
-  override fun openMediaController(): Boolean {
-    return true
-  }
-
   override fun isAddScrollView(): Boolean {
     return false
   }

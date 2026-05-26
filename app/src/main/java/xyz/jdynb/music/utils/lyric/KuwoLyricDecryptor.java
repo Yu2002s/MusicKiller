@@ -1,16 +1,12 @@
 package xyz.jdynb.music.utils.lyric;
 
 import android.os.Build;
-import android.util.Log;
-
-import com.drake.engine.utils.EncryptUtil;
 
 import java.io.ByteArrayOutputStream;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
-import java.util.Base64;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -293,7 +289,6 @@ public class KuwoLyricDecryptor {
             // 4. 转换格式
             String convertedLyric = convertKuwoLrc(rawLyric);
             System.out.println("\n转换后的LRC歌词:\n" + convertedLyric);
-
         } catch (Exception e) {
             e.printStackTrace();
         }

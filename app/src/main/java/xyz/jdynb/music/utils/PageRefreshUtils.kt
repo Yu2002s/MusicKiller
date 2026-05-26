@@ -6,7 +6,7 @@ import com.drake.brv.PageRefreshLayout
 import com.drake.brv.utils.bindingAdapter
 import com.drake.net.utils.scope
 import kotlinx.coroutines.CoroutineScope
-import xyz.jdynb.music.base.BaseMusicNavFragment
+import xyz.jdynb.music.base.BaseMusicFragment
 import xyz.jdynb.music.model.MusicModel
 
 fun <T> PageRefreshLayout.addWithData(
@@ -20,7 +20,7 @@ fun <T> PageRefreshLayout.addWithData(
 }
 
 inline fun <reified T> PageRefreshLayout.onLoad(
-  fragment: BaseMusicNavFragment<*>,
+  fragment: BaseMusicFragment<*>,
   crossinline block: suspend CoroutineScope.(PageRefreshLayout) -> List<T>?
 ): PageRefreshLayout {
   onRefresh {

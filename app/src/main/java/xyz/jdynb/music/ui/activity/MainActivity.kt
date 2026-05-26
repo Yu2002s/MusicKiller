@@ -2,17 +2,16 @@ package xyz.jdynb.music.ui.activity
 
 import android.annotation.SuppressLint
 import android.content.ComponentName
-import android.content.DialogInterface
 import android.content.Intent
 import android.content.ServiceConnection
 import android.os.Bundle
 import android.os.IBinder
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import android.widget.LinearLayout
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
-import androidx.appcompat.app.AlertDialog
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
@@ -23,14 +22,8 @@ import androidx.media3.common.Player
 import androidx.navigation.fragment.NavHostFragment
 import com.drake.engine.adapter.FragmentAdapter
 import com.drake.engine.base.EngineActivity
-import com.drake.engine.utils.AppUtils
+import com.drake.engine.utils.ScreenUtils
 import com.drake.engine.utils.dp
-import com.drake.net.Get
-import com.drake.net.component.Progress
-import com.drake.net.interfaces.ProgressListener
-import com.drake.net.utils.scope
-import com.drake.net.utils.scopeNet
-import com.drake.tooltip.toast
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.tabs.TabLayoutMediator
@@ -38,16 +31,13 @@ import com.hjq.permissions.Permission
 import com.hjq.permissions.XXPermissions
 import kotlinx.coroutines.launch
 import xyz.jdynb.music.R
-import xyz.jdynb.music.config.Api
 import xyz.jdynb.music.config.shouldShowBottomNav
 import xyz.jdynb.music.databinding.ActivityMainBinding
 import xyz.jdynb.music.download.DownloadService
-import xyz.jdynb.music.model.UpdateModel
 import xyz.jdynb.music.ui.fragment.play.LyricsFragment
 import xyz.jdynb.music.ui.fragment.play.MusicPlayFragment
+import xyz.jdynb.music.utils.UpdateUtils
 import xyz.jdynb.music.utils.fixNestedScroll
-import xyz.jdynb.music.utils.json
-import java.io.File
 
 class MainActivity : EngineActivity<ActivityMainBinding>(R.layout.activity_main), Player.Listener {
 
@@ -62,10 +52,16 @@ class MainActivity : EngineActivity<ActivityMainBinding>(R.layout.activity_main)
    */
   private var isLightStatusBar = true
 
+  /**
+   * 底栏高度
+   */
   private val bottomBarHeight = 68.dp
 
   var _downloadService: DownloadService? = null
 
+  /**
+   * 返回监听
+   */
   private val onBackPressedCallback = object : OnBackPressedCallback(false) {
     override fun handleOnBackPressed() {
       if (bottomBarBehavior.state != BottomSheetBehavior.STATE_COLLAPSED) {
@@ -79,6 +75,7 @@ class MainActivity : EngineActivity<ActivityMainBinding>(R.layout.activity_main)
 
   private val serviceConnection = object : ServiceConnection {
     override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
+      // 连接到下载服务
       val binder = service as DownloadService.DownloadBinder
       _downloadService = binder.getService()
       serviceBound = true
@@ -92,71 +89,46 @@ class MainActivity : EngineActivity<ActivityMainBinding>(R.layout.activity_main)
 
   override fun init() {
     super.init()
+
+    // 添加返回监听
     onBackPressedDispatcher.addCallback(this, onBackPressedCallback)
 
+    // 绑定下载服务
     bindService(Intent(this, DownloadService::class.java), serviceConnection, BIND_AUTO_CREATE)
 
-    if (!XXPermissions.isGrantedPermissions(this, Permission.MANAGE_EXTERNAL_STORAGE)) {
-      MaterialAlertDialogBuilder(this)
-        .setTitle("提示")
-        .setMessage("需要存储权限，App才能将下载文件保存到外部储存，如果不授权将保存在Android文件夹内")
-        .setPositiveButton("授权") { dialog, which ->
-          XXPermissions.with(this).permission(
-            Permission.MANAGE_EXTERNAL_STORAGE,
-          )
-            .request(null)
-        }
-        .setNegativeButton("取消", null)
-        .show()
-    }
+    // 检查权限
+    checkPermissions()
 
-    if (!XXPermissions.isGrantedPermissions(this, Permission.POST_NOTIFICATIONS)) {
-      MaterialAlertDialogBuilder(this)
-        .setTitle("展示通知")
-        .setMessage("需要通知权限，App才能发送下载时的通知")
-        .setPositiveButton("授权") { dialog, which ->
-          XXPermissions.with(this).permission(
-            Permission.POST_NOTIFICATIONS
-          ).request(null)
-        }
-        .setNegativeButton("取消", null)
-        .show()
-    }
-
-    checkUpdate()
+    // 检查更新
+    UpdateUtils.checkUpdate(this)
   }
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
-    WindowCompat.setDecorFitsSystemWindows(window, false)
 
-    val navHostFragment = supportFragmentManager
-      .findFragmentById(R.id.nav_host_fragment) as NavHostFragment
-
-    val navController = navHostFragment.navController
-
-    windowInsetsController = WindowCompat.getInsetsController(window, binding.root)
-
-    navController.addOnDestinationChangedListener { controller, destination, arguments ->
-      mainViewModel.changeBottomBarVisible(destination.shouldShowBottomNav())
-    }
+    initWindow()
+    initNavController()
   }
 
   override fun onClick(v: View) {
     super.onClick(v)
     when (v.id) {
+      // 播放底栏
       R.id.play_bar -> {
         mainViewModel.changeBottomBarExpand(true)
       }
 
+      // 播放页关闭按钮
       R.id.btn_close -> {
         mainViewModel.changeBottomBarExpand(false)
       }
 
+      // 播放按钮
       R.id.btn_play -> {
         mainViewModel.updateIsPlaying()
       }
 
+      // 收藏按钮
       R.id.btn_favorite -> {
         mainViewModel.addOrRemoveFavorite()
       }
@@ -171,30 +143,38 @@ class MainActivity : EngineActivity<ActivityMainBinding>(R.layout.activity_main)
     val vpMusic = binding.vpMusic
 
     vpMusic.apply {
-      offscreenPageLimit = 2
+      offscreenPageLimit = 1
       adapter = FragmentAdapter(fragments)
       fixNestedScroll()
     }
 
+    // tab 和 vp 联动
     TabLayoutMediator(binding.tab, vpMusic) { tab, position ->
       tab.text = titles[position]
     }.attach()
 
     val bottomBar = binding.bottomBar
     bottomBarBehavior = BottomSheetBehavior.from(bottomBar)
-    ViewCompat.setOnApplyWindowInsetsListener(bottomBar) { v, insets ->
+    // 播放底栏适配导航栏
+    ViewCompat.setOnApplyWindowInsetsListener(bottomBar) { _, insets ->
+      // 计算导航栏高度
       val navigationBarHeight =
         insets.getInsets(WindowInsetsCompat.Type.navigationBars()).bottom
+      // 计算状态栏高度
       val statusBarHeight = insets.getInsets(WindowInsetsCompat.Type.statusBars()).top
+      // 折叠peek高度 = 底栏高度 + 导航栏高度，解决导航栏遮挡
       bottomBarBehavior.peekHeight = bottomBarHeight + navigationBarHeight
+      // 防止内容区域被底栏遮挡
       binding.navHostFragment.updatePadding(bottom = bottomBarBehavior.peekHeight)
       val lp = binding.mainPlayer.layoutParams as ViewGroup.MarginLayoutParams
+      // 顶部 marginTop 避免状态栏遮挡内容
       lp.topMargin = -(bottomBarHeight - statusBarHeight - 10.dp)
       insets
     }
 
     bottomBarBehavior.addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
       override fun onSlide(view: View, offset: Float) {
+        // 设置透明度
         binding.mainPlayer.translationZ = if (offset == 0f) -10f else 10f
         binding.mainPlayer.alpha = offset
         binding.playBar.alpha = 1 - offset
@@ -216,6 +196,7 @@ class MainActivity : EngineActivity<ActivityMainBinding>(R.layout.activity_main)
             isLightStatusBar = true
           }
         } else if (state == BottomSheetBehavior.STATE_COLLAPSED) {
+          // 折叠状态
           mainViewModel.changeBottomBarExpand(false)
           onBackPressedCallback.isEnabled = false
           if (isLightStatusBar != windowInsetsController.isAppearanceLightStatusBars) {
@@ -240,70 +221,68 @@ class MainActivity : EngineActivity<ActivityMainBinding>(R.layout.activity_main)
     }
   }
 
-  private lateinit var updateDialog: AlertDialog
+  private fun initWindow() {
+    // 沉浸式
+    WindowCompat.setDecorFitsSystemWindows(window, false)
 
-  private fun checkUpdate() {
-    scopeNet {
-      val updateModel = Get<UpdateModel?>(Api.CHECK_UPDATE) {
-        addQuery("channel", "music")
-        addQuery("versionCode", AppUtils.getAppVersionCode())
-      }.await()
-      if (updateModel == null) {
-        // toast("已是最新版本")
-        return@scopeNet
-      }
-      val downloadBtnListener = DialogInterface.OnClickListener { d, which ->
-        toast("正在后台下载...")
-        val downloadButton = updateDialog.getButton(AlertDialog.BUTTON_POSITIVE)
-        scope {
-          val downloadFile = Get<File>(updateModel.url) {
-            setDownloadDir(externalCacheDir!!)
-            setDownloadFileName(getString(R.string.app_name) + updateModel.versionName + ".apk")
-            addDownloadListener(object : ProgressListener() {
-              override fun onProgress(p: Progress) {
-                if (p.finish) {
-                  downloadButton?.text = "安装中"
-                } else {
-                  downloadButton?.text = "下载(${p.progress()})"
-                }
-              }
-            })
-          }.await()
+    windowInsetsController = WindowCompat.getInsetsController(window, binding.root)
 
-          installUpdate(downloadFile)
-        }
-      }
-
-      // 发现新版本
-      updateDialog = MaterialAlertDialogBuilder(this@MainActivity)
-        .setTitle("发现新版本")
-        .setMessage("发现新版本需要更新，可下载后进行安装更新\n\n更新内容: ${updateModel.content}")
-        .setNegativeButton("取消", null)
-        .setPositiveButton("下载", downloadBtnListener)
-        .show()
+    // 如果是横屏的话进行适配
+    if (ScreenUtils.isLandscape()) {
+      // 全屏
+      window.addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
+      // 隐藏系统栏
+      windowInsetsController.hide(WindowInsetsCompat.Type.systemBars())
+      // 设置系统栏显示行为
+      windowInsetsController.systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
     }
   }
 
-  private fun installUpdate(downloadFile: File) {
-    if (XXPermissions.isGrantedPermissions(
-        this@MainActivity,
-        Permission.REQUEST_INSTALL_PACKAGES
-      )
-    ) {
-      toast("正在跳转安装...")
-      AppUtils.installApp(downloadFile)
-    } else {
-      toast("请授权安装权限")
-      XXPermissions.with(this@MainActivity)
-        .permission(Permission.REQUEST_INSTALL_PACKAGES)
-        .request { permissions, allGranted ->
-          if (allGranted) {
-            toast("正在跳转安装")
-            AppUtils.installApp(downloadFile)
-          } else {
-            toast("安装权限被拒绝")
-          }
+  /**
+   * 初始化导航控制器
+   */
+  private fun initNavController() {
+    val navHostFragment = supportFragmentManager
+      .findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+
+    val navController = navHostFragment.navController
+
+    // 添加导航事件监听
+    navController.addOnDestinationChangedListener { controller, destination, arguments ->
+      // 判断这个目标导航能否显示底栏
+      mainViewModel.changeBottomBarVisible(destination.shouldShowBottomNav())
+    }
+  }
+
+  /**
+   * 检查权限
+   */
+  private fun checkPermissions() {
+    if (!XXPermissions.isGrantedPermissions(this, Permission.MANAGE_EXTERNAL_STORAGE)) {
+      MaterialAlertDialogBuilder(this)
+        .setTitle("提示")
+        .setMessage("需要存储权限，App才能将下载文件保存到外部储存，如果不授权将保存在Android文件夹内")
+        .setPositiveButton("授权") { _, _ ->
+          XXPermissions.with(this).permission(
+            Permission.MANAGE_EXTERNAL_STORAGE,
+          )
+            .request(null)
         }
+        .setNegativeButton("取消", null)
+        .show()
+    }
+
+    if (!XXPermissions.isGrantedPermissions(this, Permission.POST_NOTIFICATIONS)) {
+      MaterialAlertDialogBuilder(this)
+        .setTitle("展示通知")
+        .setMessage("需要通知权限，App才能发送下载时的通知")
+        .setPositiveButton("授权") { _, _ ->
+          XXPermissions.with(this).permission(
+            Permission.POST_NOTIFICATIONS
+          ).request(null)
+        }
+        .setNegativeButton("取消", null)
+        .show()
     }
   }
 }

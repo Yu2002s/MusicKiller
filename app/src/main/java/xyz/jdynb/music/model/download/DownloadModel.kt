@@ -6,6 +6,7 @@ import com.drake.engine.databinding.ObservableImpl
 import org.litepal.annotation.Column
 import org.litepal.crud.LitePalSupport
 import xyz.jdynb.music.R
+import xyz.jdynb.music.enums.DownloadStatus
 import xyz.jdynb.music.model.MusicModel
 import xyz.jdynb.music.utils.DownloadHelper
 
@@ -161,11 +162,11 @@ data class DownloadModel(
   @get:Bindable
   val statusStr: String
     get() = when (status) {
-      STATUS_PENDING -> "等待中"
-      STATUS_DOWNLOADING -> "下载中(${progress}%)"
-      STATUS_PAUSED -> "已暂停(${progress}%)"
-      STATUS_COMPLETED -> "已完成"
-      STATUS_FAILED -> "失败: $errorMessage"
+      STATUS_PENDING -> DownloadStatus.PENDING.displayName
+      STATUS_DOWNLOADING -> "${DownloadStatus.DOWNLOADING.displayName}(${progress}%)"
+      STATUS_PAUSED -> "${DownloadStatus.PAUSED}(${progress}%)"
+      STATUS_COMPLETED -> DownloadStatus.COMPLETED.displayName
+      STATUS_FAILED -> "${DownloadStatus.FAILED}: $errorMessage"
       else -> ""
     }
 

@@ -15,4 +15,13 @@
         <item name="android:fontFamily">sans-serif</item>
         <item name="android:textFontWeight" tools:targetApi="p">500</item>
     </style>
+
+    <style name="MyPreferenceTheme" parent="BasePreferenceThemeOverlay">
+        <item name="switchPreferenceCompatStyle">@style/MySwitchPreferenceStyle</item>
+    </style>
+
+    <style name="MySwitchPreferenceStyle" parent="Preference.SwitchPreferenceCompat.Material">
+        <item name="android:widgetLayout">@layout/layout_switch</item>
+        <item name="widgetLayout">@layout/layout_switch</item>
+    </style>
 </resources>

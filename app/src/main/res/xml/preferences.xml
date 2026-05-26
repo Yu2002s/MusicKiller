@@ -3,44 +3,123 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <PreferenceCategory
-        app:iconSpaceReserved="false"
-        app:title="储存">
+        android:title="@string/category_play"
+        app:iconSpaceReserved="false">
 
         <Preference
-            android:key="pref_cache"
-            android:summary="清理App音乐和图片缓存"
-            android:title="清理缓存"
+            android:key="@string/timer_close"
+            app:title="@string/title_timer_close"
+            app:iconSpaceReserved="false" />
+
+        <SwitchPreference
+            app:iconSpaceReserved="false"
+            android:key="@string/open_auto_play"
+            app:title="@string/title_open_auto_play"
+            android:summary="@string/summary_open_auto_play" />
+
+        <SeekBarPreference
+            android:defaultValue="@integer/default_max_play_count"
+            app:title="@string/title_max_play_count"
+            android:summary="@string/summary_max_play_count"
+            app:iconSpaceReserved="false"
+            android:key="@string/max_play_count"
+            app:min="1"
+            android:max="100"
+            app:showSeekBarValue="true"
+            app:seekBarIncrement="1" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        app:iconSpaceReserved="false"
+        app:title="@string/category_download">
+
+        <Preference
+            android:key="@string/download_music_path"
+            android:summary=""
+            android:title="@string/title_download_music_path"
+            app:iconSpaceReserved="false" />
+
+        <Preference
+            android:enabled="false"
+            android:key="@string/download_lyric_path"
+            android:summary=""
+            android:title="@string/title_download_lyric_path"
             app:iconSpaceReserved="false" />
 
     </PreferenceCategory>
 
     <PreferenceCategory
-        android:title="关于"
+        app:iconSpaceReserved="false"
+        app:title="@string/category_backup_restore">
+
+        <Preference
+            android:key="@string/backup_restore"
+            android:summary="@string/summary_backup_restore"
+            android:title="@string/title_backup_restore"
+            app:iconSpaceReserved="false" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        app:iconSpaceReserved="false"
+        app:title="@string/category_storage">
+
+        <Preference
+            android:key="@string/app_cache"
+            android:summary="@string/summary_clear_cache"
+            android:title="@string/title_clear_cache"
+            app:iconSpaceReserved="false" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="@string/category_about"
         app:iconSpaceReserved="false">
 
         <Preference
-            android:key="pref_author"
-            android:summary="冬日暖雨"
-            android:title="作者"
+            android:key="@string/app_author"
+            android:summary="@string/summary_app_author"
+            android:title="@string/title_app_author"
+            app:iconSpaceReserved="false">
+            <intent
+                android:action="android.intent.action.VIEW"
+                android:data="@string/home_url" />
+        </Preference>
+
+        <Preference
+            android:key="@string/app_version"
+            android:summary=""
+            android:title="@string/title_app_version"
             app:iconSpaceReserved="false" />
 
         <Preference
-            android:key="pref_mp"
-            android:summary="扫码关注公众号，获取最新信息"
-            android:title="公众号"
+            android:key="@string/mp"
+            android:summary="@string/summary_mp"
+            android:title="@string/title_mp"
             app:iconSpaceReserved="false" />
 
         <Preference
-            android:key="pref_gitee"
-            android:summary="https://gitee.com/jdy2002/music-killer"
-            android:title="Gitee"
-            app:iconSpaceReserved="false" />
+            android:key="@string/github"
+            android:summary="@string/github_url"
+            android:title="@string/title_github"
+            app:iconSpaceReserved="false">
+            <intent
+                android:action="android.intent.action.VIEW"
+                android:data="@string/github_url" />
+        </Preference>
 
         <Preference
-            android:key="pref_github"
-            android:summary="https://github.com/yu2002s/music-killer"
-            android:title="Github"
-            app:iconSpaceReserved="false" />
+            android:key="@string/other_app"
+            android:summary="@string/summary_other_app"
+            android:title="@string/title_other_app"
+            app:iconSpaceReserved="false">
+            <intent
+                android:action="android.intent.action.VIEW"
+                android:data="@string/other_app_url">
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent>
+        </Preference>
 
     </PreferenceCategory>
 

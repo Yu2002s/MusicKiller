@@ -7,7 +7,6 @@ import com.drake.brv.utils.models
 import com.drake.brv.utils.setup
 import com.drake.net.Get
 import com.drake.net.utils.scope
-import com.drake.tooltip.toast
 import xyz.jdynb.music.R
 import xyz.jdynb.music.config.Api
 import xyz.jdynb.music.databinding.FragmentSearchAlbumBinding
@@ -15,15 +14,16 @@ import xyz.jdynb.music.model.AlbumModel
 import xyz.jdynb.music.model.Page
 import xyz.jdynb.music.utils.removeAllItemDecorator
 
-class SearchAlbumListFragment: BaseSearchListFragment<FragmentSearchAlbumBinding>(R.layout.fragment_search_album) {
+class SearchAlbumListFragment :
+  BaseSearchListFragment<FragmentSearchAlbumBinding>(R.layout.fragment_search_album) {
+
+  init {
+    enableMediaController = false
+  }
 
   override fun onSearch() {
     binding.rvAlbum.scrollToPosition(0)
     binding.page.showLoading()
-  }
-
-  override fun openMediaController(): Boolean {
-    return false
   }
 
   override fun initView() {
@@ -46,17 +46,18 @@ class SearchAlbumListFragment: BaseSearchListFragment<FragmentSearchAlbumBinding
       }
     }
 
-    binding.rvAlbum.removeAllItemDecorator().divider {
-      setDivider(16, true)
-      includeVisible = true
-      orientation = DividerOrientation.GRID
-    }.setup {
-      addType<AlbumModel>(R.layout.item_grid_album)
+    binding.rvAlbum.removeAllItemDecorator()
+      .divider {
+        setDivider(16, true)
+        includeVisible = true
+        orientation = DividerOrientation.GRID
+      }.setup {
+        addType<AlbumModel>(R.layout.item_grid_album)
 
-      R.id.item_album.onClick {
-        toast("暂时没有开发...")
+        R.id.item_album.onClick {
+          navController.navigate(SearchMusicFragmentDirections.actionAlbumInfo(getModel()))
+        }
       }
-    }
 
     if (mData.isNotEmpty()) {
       binding.page.index = pageNo

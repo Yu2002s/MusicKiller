@@ -1,9 +1,7 @@
 package xyz.jdynb.music.ui.fragment.recommend
 
-import android.os.Bundle
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import androidx.media3.session.MediaController
 import com.drake.brv.annotaion.DividerOrientation
 import com.drake.brv.utils.dividerSpace
 import com.drake.brv.utils.models
@@ -14,7 +12,6 @@ import com.drake.net.cache.CacheMode
 import com.drake.net.utils.scope
 import com.drake.net.utils.scopeNet
 import com.google.android.material.tabs.TabLayout
-import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import xyz.jdynb.music.R
@@ -39,10 +36,6 @@ class RecommendFragment :
   private val playListTagModels = mutableListOf<PlayListTagModel>()
 
   private val viewModel by viewModels<RecommendViewModel>()
-
-  override fun openMediaController(): Boolean {
-    return true
-  }
 
   override fun initData() {
     lifecycleScope.launch {
@@ -76,32 +69,26 @@ class RecommendFragment :
   }
 
   private suspend fun loadData(cacheModel: CacheMode) = coroutineScope {
-    val tags = async {
-      Get<MutableList<PlayListTagModel>>(Api.PLAYLIST_INDEX_TAGS) {
-        setCacheMode(cacheModel)
-      }.await()
+    val tags = Get<MutableList<PlayListTagModel>>(Api.PLAYLIST_INDEX_TAGS) {
+      setCacheMode(cacheModel)
     }
 
-    val ranks = async {
-      Get<List<MusicRankModel>>(Api.RANK_INDEX) {
-        setCacheMode(cacheModel)
-      }.await().onEach {
-        it.leader = it.leader.replace("酷我", "")
-      }
+    val ranks = Get<List<MusicRankModel>>(Api.RANK_INDEX) {
+      setCacheMode(cacheModel)
     }
 
-    val playListModelData = async {
-      Get<Page<PlayListModel>>(Api.PLAYLIST_RECOMMEND) {
-        query(QueryPlayListParams(id = "rcm"))
-        setCacheMode(cacheModel)
-      }.await()
+    val playListModelData = Get<Page<PlayListModel>>(Api.PLAYLIST_RECOMMEND) {
+      query(QueryPlayListParams(id = "rcm"))
+      setCacheMode(cacheModel)
     }
 
     val playListTagModels = tags.await()
     playListTagModels.add(0, PlayListTagModel(name = "每日推荐"))
     viewModel.updateTagsState(playListTagModels)
     viewModel.updatePlayListState(playListModelData.await().data)
-    viewModel.changeRankMusicState(ranks.await())
+    viewModel.changeRankMusicState(ranks.await().onEach {
+      it.leader = it.leader.replace("酷我", "")
+    })
   }
 
   override fun initView() {
@@ -194,9 +181,4 @@ class RecommendFragment :
       }
     })
   }
-
-  override fun onSaveInstanceState(outState: Bundle) {
-    super.onSaveInstanceState(outState)
-  }
-
 }

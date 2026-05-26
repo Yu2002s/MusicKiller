@@ -38,10 +38,6 @@ class DownloadListFragment : BaseMusicNavFragment<FragmentDownloadListBinding>(R
     }
   }
 
-  override fun openMediaController(): Boolean {
-    return true
-  }
-
   override fun initView() {
 
     binding.page.onRefresh {
@@ -99,7 +95,7 @@ class DownloadListFragment : BaseMusicNavFragment<FragmentDownloadListBinding>(R
 
       R.id.btn_play.onClick {
         val model = getModel<DownloadModel>()
-        addDownloadPlay(downloadModel = model)
+        addLocalPlay(downloadModel = model)
       }
     }
   }
@@ -128,19 +124,17 @@ class DownloadListFragment : BaseMusicNavFragment<FragmentDownloadListBinding>(R
    * Observe download progress from DownloadService
    */
   private fun observeDownloadProgress() {
-    _downloadService?.let { service ->
-      viewLifecycleOwner.lifecycleScope.launch {
-        service.downloadProgress.collect { progressMap ->
-          // Update RecyclerView items based on progress
-          binding.rvDownload.models?.forEachIndexed { index, model ->
-            if (model is DownloadModel) {
-              progressMap[model.musicId]?.let { progress ->
-                // Only update if there are changes
-                if (model.downloadedSize != progress.downloadedSize || model.status != progress.status) {
-                  model.downloadedSize = progress.downloadedSize
-                  model.status = progress.status
-                  binding.rvDownload.adapter?.notifyItemChanged(index)
-                }
+    viewLifecycleOwner.lifecycleScope.launch {
+      downloadService?.downloadProgress?.collect { progressMap ->
+        // Update RecyclerView items based on progress
+        binding.rvDownload.models?.forEachIndexed { index, model ->
+          if (model is DownloadModel) {
+            progressMap[model.musicId]?.let { progress ->
+              // Only update if there are changes
+              if (model.downloadedSize != progress.downloadedSize || model.status != progress.status) {
+                model.downloadedSize = progress.downloadedSize
+                model.status = progress.status
+                binding.rvDownload.adapter?.notifyItemChanged(index)
               }
             }
           }

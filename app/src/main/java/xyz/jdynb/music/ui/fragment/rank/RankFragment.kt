@@ -1,14 +1,9 @@
 package xyz.jdynb.music.ui.fragment.rank
 
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
-import com.drake.brv.utils.bindingAdapter
-import com.drake.brv.utils.dividerSpace
 import com.drake.brv.utils.models
 import com.drake.brv.utils.setup
-import com.drake.engine.utils.dp
 import com.drake.net.Get
 import com.drake.net.utils.scope
 import kotlinx.coroutines.launch
@@ -20,12 +15,15 @@ import xyz.jdynb.music.databinding.ItemRankMenuBinding
 import xyz.jdynb.music.model.MusicRankMenuItemModel
 import xyz.jdynb.music.model.MusicRankMenuModel
 import xyz.jdynb.music.ui.fragment.HomeFragmentDirections
-import xyz.jdynb.music.utils.removeAllItemDecorator
 
 /**
  * 排行榜
  */
 class RankFragment : BaseMusicNavFragment<FragmentRankBinding>(R.layout.fragment_rank) {
+
+  init {
+    enableMediaController = false
+  }
 
   private val viewModel by viewModels<RankViewModel>()
 

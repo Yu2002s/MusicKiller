@@ -21,35 +21,15 @@ class ArtistMusicFragment :
 
   private val args get() = (requireParentFragment() as ArtistInfoFragment).args
 
-  override fun openMediaController(): Boolean {
-    return true
-  }
-
   override fun getMusicModels(): List<Any?>? {
     return binding.rvArtistMusic.models
   }
 
-  override fun getMusicRecyclerView(): RecyclerView? {
+  override fun getMusicRecyclerView(): RecyclerView {
     return binding.rvArtistMusic
   }
 
   override fun initView() {
-    /*binding.page.onRefresh {
-      scope {
-        val result = Get<Page<MusicModel>>(Api.ARTIST_MUSIC) {
-          addQuery("artistId", args.artist.id)
-          addQuery("pageNo", index)
-          addQuery("pageSize", 20)
-        }.await()
-
-        addData(result.data.onEach {
-          mainViewModel.getMusicModelState(it)
-        }) {
-          result.total > modelCount
-        }
-      }
-    }.showLoading()*/
-
     binding.page.onLoad(this) { page ->
       val result = Get<Page<MusicModel>>(Api.ARTIST_MUSIC) {
         addQuery("artistId", args.artist.id)

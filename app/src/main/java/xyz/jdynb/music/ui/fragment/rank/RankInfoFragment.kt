@@ -24,10 +24,6 @@ class RankInfoFragment: BaseMusicAppbarFragment<FragmentRankInfoBinding>(R.layou
     return false
   }
 
-  override fun openMediaController(): Boolean {
-    return true
-  }
-
   override fun getMusicModels(): List<Any?>? {
     return binding.rvRankMusic.models
   }

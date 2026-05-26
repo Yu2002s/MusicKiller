@@ -6,7 +6,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class Page<T>(
   val total: Long = 0,
-  val data: List<T>,
+  val data: List<T> = listOf(),
   @SerialName("pn")
   var page: Int = 1,
 )

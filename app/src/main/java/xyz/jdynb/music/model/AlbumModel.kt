@@ -12,4 +12,4 @@ data class AlbumModel(
   val artistId: Long = 0,
   val pic: String = "",
   val lang: String = "",
-)
+): java.io.Serializable

@@ -21,10 +21,6 @@ abstract class BaseSearchListFragment<V : ViewDataBinding>(@LayoutRes contentLay
 
   protected val mData = mutableListOf<Any>()
 
-  override fun openMediaController(): Boolean {
-    return true
-  }
-
   fun <T> addPage(page: Page<T>) {
     pageNo = page.page
     if (pageNo == 1) {

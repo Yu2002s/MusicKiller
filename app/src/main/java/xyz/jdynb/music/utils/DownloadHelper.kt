@@ -4,8 +4,10 @@ import android.content.Context
 import android.os.Environment
 import com.hjq.permissions.Permission
 import com.hjq.permissions.XXPermissions
+import xyz.jdynb.music.config.SPConfig
 import xyz.jdynb.music.model.MusicModel
 import xyz.jdynb.music.model.download.DownloadModel
+import xyz.jdynb.music.utils.SpUtils.getRequired
 import java.io.File
 import java.text.DecimalFormat
 import kotlin.math.log10
@@ -39,10 +41,11 @@ object DownloadHelper {
     val musicDir = if (isGranted) Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
      else context.getExternalFilesDir(Environment.DIRECTORY_MUSIC)
     val downloadDir = File(musicDir, "MusicKiller")
-    if (!downloadDir.exists()) {
-      downloadDir.mkdirs()
+    val savedDownloadPath = File(SPConfig.DOWNLOAD_MUSIC_PATH.getRequired<String>(downloadDir.path))
+    if (!savedDownloadPath.exists()) {
+      savedDownloadPath.mkdirs()
     }
-    return downloadDir
+    return savedDownloadPath
   }
 
   /**

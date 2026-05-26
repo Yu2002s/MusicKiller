@@ -30,7 +30,7 @@ object SecurityManager {
             // killApp("Debugger detected")
         }
         if (isEmulator()) {
-            killApp("Emulator detected")
+            // killApp("Emulator detected")
         }
         if (isProxyEnabled(context)) {
             killApp("Proxy detected")

@@ -3,15 +3,15 @@ package xyz.jdynb.music.config
 import xyz.jdynb.music.BuildConfig
 
 object Api {
-  val BASE_API: String = if (/*BuildConfig.DEBUG*/false) {
-    "http://192.168.31.139:8080"
+  val BASE_API: String = if (BuildConfig.DEBUG) {
+    "http://192.168.31.140:8080"
   } else {
-    "http://47.103.74.108:8005"
+    "http://music.jdynb.xyz"
   }
-  // const val BASE_API = "http://192.168.1.42"
 
-  const val HOME_DATA = "/home/data"
-
+  /**
+   * 检查更新
+   */
   const val CHECK_UPDATE = "/update/check"
 
   /**
@@ -74,8 +74,19 @@ object Api {
    */
   const val ARTIST_LIST = "/music/artist/list"
 
+  /**
+   * 歌手音乐
+   */
   const val ARTIST_MUSIC = "/music/artist/music"
 
+  /**
+   * 歌手专辑
+   */
+  const val ARTIST_ALBUM = "/music/artist/album"
+
+  /**
+   * 歌手信息
+   */
   const val ARTIST_INFO = "/music/artist/info"
 
   /**
@@ -88,10 +99,24 @@ object Api {
    */
   const val SEARCH = "/music/search"
 
+  /**
+   * 搜索专辑
+   */
   const val SEARCH_ALBUM = "/music/search/album"
 
+  /**
+   * 搜索歌单
+   */
   const val SEARCH_PLAYLIST = "/music/search/playlist"
 
+  /**
+   * 搜索歌手
+   */
   const val SEARCH_ARTIST = "/music/search/artist"
+
+  /**
+   * 专辑信息
+   */
+  const val ALBUM_INFO = "/music/album/info"
 
 }

@@ -24,7 +24,7 @@ class SearchMusicListFragment :
     return binding.rvMusic.models
   }
 
-  override fun getMusicRecyclerView(): RecyclerView? {
+  override fun getMusicRecyclerView(): RecyclerView {
     return binding.rvMusic
   }
 

@@ -16,10 +16,6 @@ import xyz.jdynb.music.utils.onLoad
 class DownloadedFragment :
   BaseMusicNavFragment<FragmentDownloadedBinding>(R.layout.fragment_downloaded) {
 
-  override fun openMediaController(): Boolean {
-    return true
-  }
-
   override fun onResume() {
     if (!isFirstResume) {
       binding.page.refresh()

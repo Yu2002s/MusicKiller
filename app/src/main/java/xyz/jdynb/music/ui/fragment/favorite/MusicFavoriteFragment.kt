@@ -1,10 +1,8 @@
 package xyz.jdynb.music.ui.fragment.favorite
 
 import android.os.Bundle
-import android.util.Log
 import androidx.core.os.bundleOf
 import androidx.recyclerview.widget.RecyclerView
-import com.drake.brv.BindingAdapter
 import com.drake.net.utils.withIO
 import org.litepal.LitePal
 import org.litepal.extension.find
@@ -14,7 +12,6 @@ import xyz.jdynb.music.databinding.FragmentFavoriteMusicBinding
 import xyz.jdynb.music.model.FavoriteModel
 import xyz.jdynb.music.model.MusicModel
 import xyz.jdynb.music.model.PlayListModel
-import xyz.jdynb.music.ui.fragment.playlist.PlayListInfoFragmentDirections
 import xyz.jdynb.music.utils.onLoad
 
 class MusicFavoriteFragment :
@@ -40,25 +37,21 @@ class MusicFavoriteFragment :
     enableMultiMode = type == FavoriteModel.TYPE_SONG
   }
 
-  override fun openMediaController(): Boolean {
-    return true
-  }
-
-  override fun getMusicRecyclerView(): RecyclerView? {
+  override fun getMusicRecyclerView(): RecyclerView {
     return binding.rvFavorite
   }
 
-  override fun onMusicRecyclerViewSetup(onMusicItemClick: (BindingAdapter.(Int, MusicModel) -> Unit)?) {
-
-    if (type == FavoriteModel.TYPE_SONG) {
-      return super.onMusicRecyclerViewSetup(onMusicItemClick)
+  override fun onMusicRecyclerViewSetup() {
+    if (type == FavoriteModel.TYPE_PLAYLIST) {
+      // 歌单则另外设置点击事件，覆盖默认的事件
+      onMusicItemClick = { position, model ->
+        navController.navigate(FavoriteFragmentDirections.actionPlaylistInfo(
+          PlayListModel(id = model.id)
+        ))
+      }
     }
 
-    super.onMusicRecyclerViewSetup { position, model ->
-      navController.navigate(FavoriteFragmentDirections.actionPlaylistInfo(
-        PlayListModel(id = model.id)
-      ))
-    }
+    return super.onMusicRecyclerViewSetup()
   }
 
   override fun initView() {

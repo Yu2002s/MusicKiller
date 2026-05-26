@@ -1,15 +1,12 @@
 package xyz.jdynb.music.ui.fragment.artist
 
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
 import com.drake.brv.annotaion.DividerOrientation
 import com.drake.brv.utils.divider
 import com.drake.brv.utils.models
 import com.drake.brv.utils.setup
-import com.drake.engine.utils.dp
 import com.drake.net.Get
 import com.drake.net.utils.scope
-import kotlinx.coroutines.launch
 import xyz.jdynb.music.R
 import xyz.jdynb.music.base.BaseMusicNavFragment
 import xyz.jdynb.music.config.Api
@@ -21,6 +18,10 @@ import xyz.jdynb.music.ui.fragment.HomeFragmentDirections
 class ArtistFragment: BaseMusicNavFragment<FragmentArtistBinding>(R.layout.fragment_artist) {
 
   private val viewModel by viewModels<ArtistViewModel>()
+
+  init {
+    enableMediaController = false
+  }
 
   override fun onFirstResume() {
     super.onFirstResume()

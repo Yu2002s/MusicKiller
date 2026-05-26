@@ -3,8 +3,8 @@ package xyz.jdynb.music.model
 import androidx.databinding.PropertyChangeRegistry
 import com.drake.engine.databinding.ObservableImpl
 import kotlinx.serialization.Contextual
-import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.Transient
 import org.litepal.annotation.Column
 import org.litepal.crud.LitePalSupport
 
@@ -62,6 +62,8 @@ data class FavoriteModel(
 ) : LitePalSupport(), ObservableImpl {
 
   @Contextual
+  @Column(ignore = true)
+  @Transient
   override val registry: PropertyChangeRegistry = PropertyChangeRegistry()
 
   /**

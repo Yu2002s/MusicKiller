@@ -3,38 +3,30 @@ package xyz.jdynb.music.ui.fragment.play
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
-import android.view.View
 import android.widget.SeekBar
 import androidx.appcompat.content.res.AppCompatResources
-import androidx.core.view.HapticFeedbackConstantsCompat
-import androidx.core.view.ViewCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.media3.common.MediaItem
 import androidx.media3.common.MediaMetadata
 import androidx.media3.common.PlaybackException
 import androidx.media3.common.Player
-import androidx.media3.common.util.Util
 import androidx.media3.session.MediaController
-import com.drake.net.Get
 import com.drake.net.utils.scope
-import com.drake.net.utils.scopeDialog
+import com.drake.net.utils.withIO
 import com.drake.tooltip.toast
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.coroutines.Runnable
 import kotlinx.coroutines.launch
+import org.litepal.LitePal
+import org.litepal.extension.find
 import xyz.jdynb.music.R
 import xyz.jdynb.music.base.BaseMusicNavFragment
-import xyz.jdynb.music.config.Api
-import xyz.jdynb.music.config.SPConfig
 import xyz.jdynb.music.databinding.FragmentMusicPlayBinding
-import xyz.jdynb.music.enums.MusicBridge
-import xyz.jdynb.music.model.ArtistModel
 import xyz.jdynb.music.model.MusicModel
-import xyz.jdynb.music.ui.fragment.HomeFragmentDirections
+import xyz.jdynb.music.model.PlayHistory
 import xyz.jdynb.music.utils.SpUtils.getRequired
-import xyz.jdynb.music.utils.SpUtils.put
 import xyz.jdynb.music.utils.getMusicInfo
 import xyz.jdynb.music.utils.startAnimation
+import kotlin.math.min
 
 /**
  * 播放音乐页面
@@ -61,15 +53,23 @@ class MusicPlayFragment :
      * 进度更新间隔
      */
     private const val PROGRESS_UPDATE_INTERVAL = 200L
+
+    /**
+     * 默认最大的播放数
+     */
+    const val DEFAULT_MAX_PLAY_COUNT = 20
   }
 
-  private val handle = Handler(Looper.getMainLooper())
+  private val handler = Handler(Looper.getMainLooper())
 
   /**
    * 进度是否正在运行
    */
   private var isRunningProgress = false
 
+  /**
+   * 用户是否手动修改进度
+   */
   private var isUserTrackProgress = false
 
   /**
@@ -90,36 +90,26 @@ class MusicPlayFragment :
       // 更新进度
       musicInfo.currentPosition = currentPosition
       mainViewModel.updateCurrentPosition(currentPosition)
+      // 修正进度条最大值
 
       if (mediaController.isPlaying) {
         // 循环调用更新进度
-        handle.postDelayed(this, PROGRESS_UPDATE_INTERVAL)
+        handler.postDelayed(this, PROGRESS_UPDATE_INTERVAL)
       } else {
         isRunningProgress = false
       }
     }
   }
 
-  override fun openMediaController() = true
-
   override fun onCreateMediaController(controller: MediaController) {
     controller.removeListener(this)
     controller.addListener(this)
 
     lifecycleScope.launch {
-      // 播放循环模式修改
-      mainViewModel.repeatMode.collect {
-        if (it != mediaController.repeatMode) {
-          mediaController.repeatMode = it
-        }
-      }
-    }
-
-    lifecycleScope.launch {
       // 修改播放状态
       mainViewModel.isPlaying.collect {
         if (it != mediaController.isPlaying) {
-          if (!handlePlayOrPause()) {
+          if (!playOrPause()) {
             mainViewModel.updateIsPlaying(false)
           }
         }
@@ -131,6 +121,23 @@ class MusicPlayFragment :
       mainViewModel.currentPosition.collect {
         if (it != musicInfo.currentPosition) {
           mediaController.seekTo(it)
+        }
+      }
+    }
+
+    if (getString(R.string.open_auto_play).getRequired<Boolean>(false)) {
+      // 加载最近播放的歌曲
+      scope {
+        val playList = withIO {
+          val defaultMaxPlayCount = resources.getInteger(R.integer.default_max_play_count)
+          val histories = LitePal.order("updateTime desc").limit(defaultMaxPlayCount).find<PlayHistory>()
+          if (histories.isEmpty()) return@withIO emptyList()
+          val size = min(getString(R.string.max_play_count).getRequired<Int>(defaultMaxPlayCount), histories.size)
+          histories.subList(0, size).map { it.toMusicModel() }
+        }
+        if (playList.isNotEmpty()) {
+          mainViewModel.updateMusicModel(playList.first())
+          addPlaylist(playList)
         }
       }
     }
@@ -150,14 +157,7 @@ class MusicPlayFragment :
     binding.lifecycleOwner = this
 
     binding.musicArtist.setOnClickListener {
-      if (musicModel.artistId == 0L) return@setOnClickListener
-      scopeDialog {
-        val artistInfo = Get<ArtistModel>(Api.ARTIST_INFO) {
-          addQuery("artistId", musicInfo.artistId)
-        }.await()
-        mainViewModel.changeBottomBarExpand(false)
-        navController.navigate(HomeFragmentDirections.actionArtistInfo(artistInfo))
-      }
+      openArtistInfo()
     }
 
     // 更新播放进度
@@ -186,121 +186,44 @@ class MusicPlayFragment :
     })
 
     binding.btnPlay.setOnClickListener {
-      handlePlayOrPause(it)
+      // 播放/暂停
+      playOrPause(it)
     }
 
     binding.btnPrev.setOnClickListener {
       // 上一首
-      if (mediaController.mediaItemCount == 1 && mediaController.repeatMode == Player.REPEAT_MODE_ALL) {
-        mediaController.seekToDefaultPosition()
-        return@setOnClickListener
-      }
-      if (mediaController.hasPreviousMediaItem()) {
-        mediaController.seekToPreviousMediaItem()
-      } else {
-        toast("没有上一首了")
-      }
+      prevMusic()
     }
 
     binding.btnNext.setOnClickListener {
       // 下一首
-      if (mediaController.mediaItemCount == 1 && mediaController.repeatMode == Player.REPEAT_MODE_ALL) {
-        mediaController.seekToDefaultPosition()
-        return@setOnClickListener
-      }
-      if (mediaController.hasNextMediaItem()) {
-        mediaController.seekToNextMediaItem()
-      } else {
-        toast("没有下一首了")
-      }
+      nextMusic()
     }
 
     binding.btnMode.setOnClickListener {
       // 修改播放模式
-      val repeatMode = mediaController.repeatMode
-      mainViewModel.updateRepeatMode(
-        if (repeatMode == Player.REPEAT_MODE_ONE)
-          Player.REPEAT_MODE_ALL else Player.REPEAT_MODE_ONE
-      )
+      switchRepeatMode()
     }
 
     binding.btnPlaylist.setOnClickListener {
       // 打开歌单列表
-      navController.navigate(HomeFragmentDirections.actionPlayQueue())
+      openPlaylist()
     }
 
     binding.btnFavorite.setOnClickListener {
       // 收藏
-      mainViewModel.addOrRemoveFavorite()
+      addOrRemoveFavorite()
     }
 
     binding.btnQuality.setOnClickListener {
-      // 修改音质
-      val qualities = MusicBridge.entries.map { it.level }.toTypedArray()
-      var currentBridge = SPConfig.CURRENT_BRIDGE.getRequired(MusicBridge.MP3_128K.level)
-      val hasLossless = mainViewModel.musicModel.value.hasLossless
-      if (currentBridge == MusicBridge.FLAC_2000K.level && !hasLossless) {
-        currentBridge = MusicBridge.MP3_320K.level
-      }
-      val currentItem = qualities.indexOf(currentBridge)
-      MaterialAlertDialogBuilder(requireContext())
-        .setTitle("选择音质")
-        .setSingleChoiceItems(qualities, currentItem) { dialog, which ->
-          SPConfig.CURRENT_BRIDGE.put(qualities[which])
-          rePlay()
-          dialog.dismiss()
-        }.setPositiveButton("取消", null)
-        .show()
+      // 音质
+      setMusicBridge()
     }
 
     binding.btnDownload.setOnClickListener {
-      val qualities = MusicBridge.entries.map { it.level }.toTypedArray()
-      var currentBridgeLevel = SPConfig.CURRENT_BRIDGE.getRequired(MusicBridge.MP3_128K.level)
-      val hasLossless = mainViewModel.musicModel.value.hasLossless
-      if (currentBridgeLevel == MusicBridge.FLAC_2000K.level && !hasLossless) {
-        currentBridgeLevel = MusicBridge.MP3_320K.level
-      }
-      val currentItem = qualities.indexOf(currentBridgeLevel)
-      var currentBridge = MusicBridge.entries[currentItem]
-      MaterialAlertDialogBuilder(requireContext())
-        .setTitle("选择音质")
-        .setSingleChoiceItems(qualities, currentItem) { dialog, which ->
-          currentBridge = MusicBridge.entries[which]
-        }
-        .setPositiveButton("下载") { dialog, which ->
-          val musicModel = mainViewModel.musicModel.value
-          if (musicModel.id == 0L) {
-            toast("请选择有效音乐下载")
-            return@setPositiveButton
-          }
-          Log.i(TAG, "download: $_downloadService, $musicModel, $currentBridge")
-          _downloadService?.addDownload(musicModel, currentBridge)
-        }
-        .setNegativeButton("取消", null)
-        .show()
+      // 下载
+      addDownload()
     }
-  }
-
-  private fun handlePlayOrPause(v: View? = null): Boolean {
-    // 播放状态修改
-    if (mediaController.currentMediaItem == null) {
-      // 可能网络问题没有播放信息
-      val musicModel = mainViewModel.musicModel.value
-      if (musicModel.id != 0L) {
-        // 尝试重新播放
-        rePlay()
-        return true
-      }
-      toast("请先选择歌曲播放")
-      return false
-    }
-    v?.let {
-      ViewCompat.performHapticFeedback(it, HapticFeedbackConstantsCompat.CONTEXT_CLICK)
-    }
-    if (!Util.handlePlayPauseButtonAction(mediaController)) {
-      rePlay()
-    }
-    return true
   }
 
   override fun onMusicFavoriteChanged(musicId: Long, isFavorite: Boolean) {
@@ -375,9 +298,7 @@ class MusicPlayFragment :
       Player.STATE_READY -> {
         // 准备播放
         Log.i(TAG, "onPlaybackStateChanged: 已准备, duration: ${mediaController.duration}")
-        if (binding.musicSeekbar.max == 0) {
-          binding.musicSeekbar.max = mediaController.duration.toInt()
-        }
+        binding.musicSeekbar.max = mediaController.duration.toInt()
       }
 
       Player.STATE_BUFFERING -> {
@@ -395,7 +316,7 @@ class MusicPlayFragment :
    * 播放错误回调
    */
   override fun onPlayerError(error: PlaybackException) {
-    toast(error.message)
+    toast("播放失败，请稍后重试：" + error.message)
   }
 
   private fun runProgress() {
@@ -406,7 +327,7 @@ class MusicPlayFragment :
     isRunningProgress = true
     progressRunnable.run()
     Log.i(TAG, "runProgress")
-    handle.postDelayed(progressRunnable, PROGRESS_UPDATE_INTERVAL)
+    handler.postDelayed(progressRunnable, PROGRESS_UPDATE_INTERVAL)
   }
 
   /**
@@ -444,7 +365,7 @@ class MusicPlayFragment :
 
   override fun onDestroy() {
     super.onDestroy()
-    handle.removeCallbacks(progressRunnable)
+    handler.removeCallbacks(progressRunnable)
     mediaController.removeListener(this)
   }
 

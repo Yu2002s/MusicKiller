@@ -4,7 +4,6 @@ import android.view.LayoutInflater
 import android.view.View
 import androidx.annotation.LayoutRes
 import androidx.databinding.ViewDataBinding
-import androidx.fragment.app.Fragment
 import androidx.viewpager2.widget.ViewPager2
 import com.drake.engine.adapter.FragmentAdapter
 import com.google.android.material.tabs.TabLayout
@@ -12,8 +11,15 @@ import com.google.android.material.tabs.TabLayoutMediator
 import xyz.jdynb.music.databinding.LayoutTabBinding
 import xyz.jdynb.music.model.PageModel
 
+/**
+ * 音乐基类(AppBar + ViewPager2)
+ */
 abstract class BaseMusicVpFragment<V : ViewDataBinding>(@LayoutRes contentLayoutId: Int = 0) :
   BaseMusicAppbarFragment<V>(contentLayoutId) {
+
+  init {
+    enableMediaController = false
+  }
 
   private lateinit var tab: TabLayout
 

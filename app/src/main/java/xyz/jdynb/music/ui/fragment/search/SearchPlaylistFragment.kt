@@ -15,12 +15,12 @@ import xyz.jdynb.music.utils.removeAllItemDecorator
 
 class SearchPlaylistFragment: BaseSearchListFragment<FragmentSearchPlaylistBinding>(R.layout.fragment_search_playlist) {
 
-  override fun onSearch() {
-    binding.page.showLoading()
+  init {
+    enableMediaController = false
   }
 
-  override fun openMediaController(): Boolean {
-    return false
+  override fun onSearch() {
+    binding.page.showLoading()
   }
 
   override fun initView() {

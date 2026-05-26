@@ -8,7 +8,9 @@ enum class DownloadStatus(val value: Int, val displayName: String) {
   DOWNLOADING(1, "下载中"),
   PAUSED(2, "已暂停"),
   COMPLETED(3, "已完成"),
-  FAILED(4, "失败");
+  FAILED(4, "失败")
+
+  ;
 
   companion object {
     @JvmStatic

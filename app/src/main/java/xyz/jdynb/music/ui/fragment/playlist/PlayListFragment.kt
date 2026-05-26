@@ -1,9 +1,7 @@
 package xyz.jdynb.music.ui.fragment.playlist
 
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import com.drake.brv.annotaion.DividerOrientation
 import com.drake.brv.utils.bindingAdapter
 import com.drake.brv.utils.dividerSpace
@@ -31,6 +29,10 @@ import xyz.jdynb.music.utils.removeAllItemDecorator
  * 歌单
  */
 class PlayListFragment : BaseMusicNavFragment<FragmentPlaylistBinding>(R.layout.fragment_playlist) {
+
+  init {
+    enableMediaController = false
+  }
 
   private val viewModel by viewModels<PlayListViewModel>()
 

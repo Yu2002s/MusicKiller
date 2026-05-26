@@ -96,10 +96,16 @@ class SearchViewModel : ViewModel() {
     _uiState.value = searchAction
   }
 
+  /**
+   * 关键字修改
+   */
   fun keyword(keyword: String) {
     _uiState.value.keyword = keyword
   }
 
+  /**
+   * 清除关键字
+   */
   fun clearKeyword() {
     _uiState.value = SearchAction()
   }

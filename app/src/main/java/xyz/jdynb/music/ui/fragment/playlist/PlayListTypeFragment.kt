@@ -22,13 +22,15 @@ import xyz.jdynb.music.utils.removeAllItemDecorator
 class PlayListTypeFragment :
   BaseMusicAppbarFragment<FragmentPlaylistTypeBinding>(R.layout.fragment_playlist_type) {
 
+  init {
+    enableMediaController = false
+  }
+
   override fun isAddScrollView(): Boolean {
     return false
   }
 
   private val args by navArgs<PlayListTypeFragmentArgs>()
-
-  // private val mData = mutableListOf<PlayListModel>()
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -36,22 +38,6 @@ class PlayListTypeFragment :
   }
 
   override fun initView() {
-    /*binding.page.onRefresh {
-      scope {
-        val result = Get<Page<PlayListModel>>(Api.TAG_PLAYLIST_PAGE) {
-          query(QueryPlayListParams(id = args.playListTag.id, pageNo = index, pageSize = 21, order = "new"))
-        }.await()
-        if (index == 1) {
-          mData.clear()
-        }
-        pageNo = index
-        mData.addAll(result.data)
-        addData(result.data) {
-          result.total > modelCount
-        }
-      }
-    }*/
-
     binding.rvPlaylist.removeAllItemDecorator()
       .divider {
         setDivider(16, true)
@@ -73,7 +59,7 @@ class PlayListTypeFragment :
             id = args.playListTag.id,
             pageNo = page.index,
             pageSize = 21,
-            order = "new"
+            order = "hot"
           )
         )
       }.await()
@@ -85,11 +71,6 @@ class PlayListTypeFragment :
   }
 
   override fun initData() {
-    /*if (mData.isEmpty()) {
-      binding.page.showLoading()
-    } else {
-      binding.page.index = pageNo
-      binding.page.addData(mData.toMutableList())
-    }*/
+
   }
 }

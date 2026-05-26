@@ -156,7 +156,6 @@ class PlayQueueDialogFragment : EngineBottomSheetDialogFragment<FragmentPlayQueu
     )
   }
 
-
   private inner class MusicBroadReceiver : BroadcastReceiver() {
 
     @Suppress("UNCHECKED_CAST")

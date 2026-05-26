@@ -1,5 +1,6 @@
 package xyz.jdynb.music.ui.fragment
 
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
@@ -8,6 +9,7 @@ import android.view.View
 import androidx.core.view.MenuProvider
 import androidx.lifecycle.Lifecycle
 import com.drake.engine.adapter.FragmentAdapter
+import com.drake.engine.utils.ScreenUtils
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import xyz.jdynb.music.R
@@ -22,6 +24,10 @@ import xyz.jdynb.music.ui.fragment.recommend.RecommendFragment
 class HomeFragment : BaseMusicAppbarFragment<FragmentHomeBinding>(R.layout.fragment_home),
   MenuProvider {
 
+  init {
+    enableMediaController = false
+  }
+
   private lateinit var tab: TabLayout
 
   override fun isAddScrollView(): Boolean {
@@ -31,6 +37,13 @@ class HomeFragment : BaseMusicAppbarFragment<FragmentHomeBinding>(R.layout.fragm
   override fun getAppbarContent(inflater: LayoutInflater): View? {
     tab = LayoutTabBinding.inflate(inflater).tabLayout
     return tab
+  }
+
+  override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    if (ScreenUtils.isLandscape()) {
+      isExpandedAppBar = false
+    }
+    super.onViewCreated(view, savedInstanceState)
   }
 
   override fun initData() {
@@ -43,7 +56,7 @@ class HomeFragment : BaseMusicAppbarFragment<FragmentHomeBinding>(R.layout.fragm
     binding.vp.adapter = FragmentAdapter(listOf(
       RecommendFragment(), PlayListFragment(), RankFragment(), ArtistFragment(),
     ))
-    binding.vp.offscreenPageLimit = 5
+    // binding.vp.offscreenPageLimit = 1
     binding.vp.isSaveEnabled = true
 
     val titles = arrayOf("推荐", "歌单", "排行榜", "歌手")

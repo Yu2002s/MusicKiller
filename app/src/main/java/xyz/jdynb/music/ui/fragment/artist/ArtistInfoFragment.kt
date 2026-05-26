@@ -2,7 +2,6 @@ package xyz.jdynb.music.ui.fragment.artist
 
 import androidx.navigation.fragment.navArgs
 import com.drake.engine.adapter.FragmentAdapter
-import com.drake.engine.base.app
 import com.google.android.material.tabs.TabLayoutMediator
 import xyz.jdynb.music.R
 import xyz.jdynb.music.base.BaseMusicNavFragment
@@ -13,12 +12,16 @@ class ArtistInfoFragment: BaseMusicNavFragment<FragmentArtistInfoBinding>(R.layo
 
   val args by navArgs<ArtistInfoFragmentArgs>()
 
+  init {
+    enableMediaController = false
+  }
+
   override fun initView() {
     setAppbar(binding.toolbar, binding.toolbarLayout)
 
-    binding.vp.adapter = FragmentAdapter(listOf(ArtistMusicFragment()))
+    binding.vp.adapter = FragmentAdapter(listOf(ArtistMusicFragment(), ArtistAlbumFragment()))
     TabLayoutMediator(binding.tab.tabLayout, binding.vp) { tab, position ->
-      tab.text = "单曲(${args.artist.musicNum})"
+      tab.text = if (position == 0) "单曲(${args.artist.musicNum})" else "专辑(${args.artist.albumNum})"
     }.attach()
 
     var isExpanded = true

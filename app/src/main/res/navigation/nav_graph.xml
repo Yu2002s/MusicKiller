@@ -139,12 +139,21 @@
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right" />
 
-        <action android:id="@+id/action_artist_info"
+        <action
+            android:id="@+id/action_artist_info"
             app:destination="@id/artistInfoFragment"
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right"/>
+            app:popExitAnim="@anim/slide_out_right" />
+
+        <action
+            android:id="@+id/action_album_info"
+            app:destination="@id/albumInfoFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
 
     </fragment>
 
@@ -205,9 +214,31 @@
         android:label="歌手主页"
         tools:layout="@layout/fragment_artist_info">
 
-        <argument android:name="artist"
-            app:nullable="false"
-            app:argType="xyz.jdynb.music.model.ArtistModel" />
+        <argument
+            android:name="artist"
+            app:argType="xyz.jdynb.music.model.ArtistModel"
+            app:nullable="false" />
+
+        <action
+            android:id="@+id/action_album_info"
+            app:destination="@id/albumInfoFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/albumInfoFragment"
+        android:name="xyz.jdynb.music.ui.fragment.album.AlbumInfoFragment"
+        android:label="专辑详情"
+        tools:layout="@layout/fragment_album_info">
+
+        <argument
+            android:name="albumInfo"
+            app:argType="xyz.jdynb.music.model.AlbumModel"
+            app:nullable="false" />
 
     </fragment>
 
@@ -227,7 +258,8 @@
 
     </fragment>
 
-    <fragment android:id="@+id/playHistoryFragment"
+    <fragment
+        android:id="@+id/playHistoryFragment"
         android:name="xyz.jdynb.music.ui.fragment.play.PlayHistoryFragment"
         android:label="播放历史"
         tools:layout="@layout/fragment_play_history" />

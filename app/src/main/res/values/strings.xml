@@ -1,6 +1,12 @@
 <resources>
     <string name="app_name">MusicKiller</string>
 
+    <!-- urls -->
+    <string name="github_url">https://github.com/yu2002s/MusicKiller</string>
+    <string name="home_url">https://www.jdynb.xyz</string>
+    <string name="other_app_url">http://app.jdynb.xyz</string>
+
+    <!-- 状态 -->
     <string name="error_tips">加载失败了，请稍后重试</string>
     <string name="empty_tips">这里空空如也哦！</string>
     <string name="please_login">请先登录</string>
@@ -10,4 +16,51 @@
     <string name="lyrics">歌词</string>
     <string name="select">选择</string>
     <string name="download">下载</string>
+
+    <!-- sp keys -->
+    <string name="download_music_path">download_music_path</string>
+    <string name="download_lyric_path">download_lyric_path</string>
+    <string name="backup_restore">backup_restore</string>
+    <string name="app_cache">app_cache</string>
+    <string name="app_author">app_author</string>
+    <string name="app_version">app_version</string>
+    <string name="mp">mp</string>
+    <string name="github">github</string>
+    <string name="other_app">other_app</string>
+    <string name="timer_close">timer_close</string>
+    <string name="open_auto_play">open_auto_play</string>
+    <string name="max_play_count">max_play_count</string>
+
+    <!-- sp categories -->
+    <string name="category_download">下载</string>
+    <string name="category_backup_restore">备份/恢复</string>
+    <string name="category_storage">储存</string>
+    <string name="category_about">关于</string>
+    <string name="category_play">播放</string>
+
+    <!-- sp summaries -->
+    <string name="summary_backup_restore">备份和恢复收藏音乐</string>
+    <string name="summary_clear_cache">清理App音乐和图片缓存</string>
+    <string name="summary_app_author">冬日暖雨</string>
+    <string name="summary_mp">扫码关注公众号，获取最新信息</string>
+    <string name="summary_other_app">我开发的其他App下载</string>
+    <string name="summary_open_auto_play">打开App自动播放历史歌曲</string>
+    <string name="summary_max_play_count">单次添加到播放队列的数量</string>
+
+    <!-- sp titles -->
+    <string name="title_download_music_path">下载音乐路径</string>
+    <string name="title_download_lyric_path">下载歌词路径</string>
+    <string name="title_backup_restore">备份/恢复</string>
+    <string name="title_clear_cache">清除缓存</string>
+    <string name="title_app_author">作者</string>
+    <string name="title_app_version">当前版本</string>
+    <string name="title_mp">公众号</string>
+    <string name="title_other_app">其他App</string>
+    <string name="title_github">Github</string>
+    <string name="title_timer_close">定时关闭</string>
+    <string name="title_open_auto_play">自动播放</string>
+    <string name="title_max_play_count">最大播放数</string>
+
+    <!-- paths -->
+    <string name="backup_path">/sdcard/Download/MusicKiller/backup</string>
 </resources>

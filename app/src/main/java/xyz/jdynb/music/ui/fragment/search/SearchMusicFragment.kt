@@ -13,11 +13,9 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.drake.brv.annotaion.DividerOrientation
 import com.drake.brv.utils.divider
-import com.drake.brv.utils.dividerSpace
 import com.drake.brv.utils.models
 import com.drake.brv.utils.setup
 import com.drake.engine.adapter.FragmentAdapter
-import com.drake.engine.utils.dp
 import com.drake.net.utils.scope
 import com.google.android.material.tabs.TabLayoutMediator
 import kotlinx.coroutines.Dispatchers
@@ -33,6 +31,10 @@ import xyz.jdynb.music.utils.removeAllItemDecorator
  */
 class SearchMusicFragment :
   BaseMusicNavFragment<FragmentSearchMusicBinding>(R.layout.fragment_search_music), MenuProvider {
+
+  init {
+    enableMediaController = false
+  }
 
   companion object {
 

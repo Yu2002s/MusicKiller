@@ -1,7 +1,6 @@
 package xyz.jdynb.music.base
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.OnClickListener
@@ -20,17 +19,25 @@ import kotlin.math.abs
 abstract class BaseMusicAppbarFragment<V : ViewDataBinding>(@LayoutRes contentLayoutId: Int = 0) :
   BaseMusicNavFragment<V>(contentLayoutId), OnClickListener {
 
+  /**
+   * 内容区域视图
+   */
   var contentView: View? = null
 
   override val binding: V
     get() = DataBindingUtil.bind<V>(contentView!!)!!
 
+  /**
+   * 包含AppBar的基础布局
+   */
   lateinit var baseContentBinding: FragmentBaseBinding
 
-  private var isExpandedAppBar = true
+  protected var isExpandedAppBar = true
 
   /**
    * 是否自动添加滚动视图
+   *
+   * @return true 添加，false不添加
    */
   protected open fun isAddScrollView() = true
 

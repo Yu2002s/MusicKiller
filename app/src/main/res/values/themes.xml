@@ -17,4 +17,5 @@
         <item name="android:windowContentOverlay">@null</item>
         <item name="android:windowTitleStyle">@null</item>
     </style>
+
 </resources>

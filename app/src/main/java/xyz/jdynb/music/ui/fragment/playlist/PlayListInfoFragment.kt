@@ -5,7 +5,6 @@ import androidx.navigation.fragment.navArgs
 import com.drake.brv.utils.models
 import com.drake.net.Get
 import com.drake.net.utils.scope
-import com.drake.tooltip.toast
 import xyz.jdynb.music.R
 import xyz.jdynb.music.base.BaseMusicNavFragment
 import xyz.jdynb.music.config.Api
@@ -27,8 +26,6 @@ class PlayListInfoFragment :
   init {
     enableMultiMode = true
   }
-
-  override fun openMediaController() = true
 
   override fun initData() {
     binding.page.onLoad(this) { page ->

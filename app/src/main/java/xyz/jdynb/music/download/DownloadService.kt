@@ -413,6 +413,8 @@ class DownloadService : Service() {
         addQuery("bridge", bridge.level)
       }.await()
 
+      // musicModel.name = musicModel.name.replace("[/:*?\"<>|]".toRegex(), " ")
+
       val lyricFile = DownloadHelper.getLyricFilePath(this@DownloadService, musicModel)
       if (!lyricFile.exists()) {
         val lyricContent = LyricUtils.getLyricContent(musicModel.id)

@@ -1,7 +1,6 @@
 package xyz.jdynb.music.model
 
 
-import android.util.Log
 import androidx.databinding.BaseObservable
 import androidx.databinding.Bindable
 import androidx.fragment.app.Fragment
@@ -22,6 +21,7 @@ import xyz.jdynb.music.R
 import xyz.jdynb.music.base.BaseMusicNavFragment
 import xyz.jdynb.music.model.download.DownloadModel
 import xyz.jdynb.music.ui.activity.MainViewModel
+import xyz.jdynb.music.utils.SpUtils.getRequired
 import kotlin.math.min
 
 @Serializable
@@ -137,6 +137,7 @@ data class MusicModel(
         localPath = downloadModel.localPath
       )
     }
+
   }
 }
 
@@ -208,8 +209,13 @@ fun RecyclerView.setupMusicRv(
       }
       // 添加到播放器
       if (fragment is BaseMusicNavFragment<*>) {
+        val maxPlayCount = context.getString(R.string.max_play_count)
+          .getRequired<Int>(resources.getInteger(R.integer.default_max_play_count))
         val filteredList =
-          models!!.subList(modelPosition, modelPosition + min(20, modelCount - modelPosition))
+          models!!.subList(
+            modelPosition,
+            modelPosition + min(maxPlayCount, modelCount - modelPosition)
+          )
         fragment.addPlaylist(filteredList, true)
       }
     }
@@ -225,7 +231,7 @@ fun RecyclerView.setupMusicRv(
         }
         return@onClick
       }
-      mainViewModel.addOrRemoveFavorite()
+      mainViewModel.addOrRemoveFavorite(model)
     }
 
     R.id.btn_add.onClick {

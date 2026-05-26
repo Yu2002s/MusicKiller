@@ -14,6 +14,10 @@ import xyz.jdynb.music.model.Page
 
 class SearchArtistListFragment: BaseSearchListFragment<FragmentSearchArtistBinding>(R.layout.fragment_search_artist) {
 
+  init {
+    enableMediaController = false
+  }
+
   override fun onSearch() {
     binding.page.showLoading()
   }
