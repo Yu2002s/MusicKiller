@@ -6,16 +6,6 @@
 
 [点我去下载](https://gitee.com/jdy2002/MusicKiller/releases)
 
-## 交流/反馈
-
-- QQ 群
-
-<img src="./screenshots/qrcode_1773500386502.jpg" alt="Logo" width="250" style="display:block;margin:auto;">
-
-- 公众号
-
-<img src="./screenshots/qrcode_mp.jpg" alt="Logo" width="258" style="display:block;margin:auto;">
-
 ## 注意
 
 - 只能用于学习用途
@@ -89,11 +79,4 @@
 
 有问题或建议？
 
-- Gitee: [https://gitee.com/jdy2002/music-killer](https://gitee.com/jdy2002/music-killer)
 - GitHub: [https://github.com/yu2002s/music-killer](https://github.com/yu2002s/music-killer)
-- 网站: [https://www.jdynb.xyz](https://www.jdynb.xyz)
-
-## 关于
-
-开发者：冬日暖雨 (yu2002s)
-邮箱：jiangdongyu54@gmail.com
